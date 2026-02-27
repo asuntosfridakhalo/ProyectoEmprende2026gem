@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ProyectoEmprende2026 - Registro</title>
+    <title>ProyectoEmprende2026 - Registro Profesional</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -11,194 +11,310 @@
         :root {
             --verde-obscuro: #004d40;
             --dorado: #d4af37;
-            --azul-obscuro: #0d47a1;
+            --azul-obscuro: #0a192f;
             --blanco: #ffffff;
         }
-        body { background-color: #f4f4f4; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .navbar { background-color: var(--azul-obscuro); border-bottom: 4px solid var(--dorado); }
+        body { background-color: #f0f2f5; font-family: 'Helvetica Neue', Arial, sans-serif; }
+        .navbar { background-color: var(--azul-obscuro); border-bottom: 5px solid var(--dorado); }
+        
+        /* Botones 3D */
         .btn-3d {
             background-color: var(--verde-obscuro);
-            color: white;
-            border: none;
+            color: white; border: none;
             border-bottom: 5px solid #00251a;
-            transition: all 0.2s;
-            font-weight: bold;
+            transition: all 0.1s; font-weight: bold; text-transform: uppercase;
         }
         .btn-3d:active { border-bottom: 2px solid #00251a; transform: translateY(3px); }
-        .card { border: 1px solid var(--dorado); border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .header-title { color: var(--azul-obscuro); font-weight: bold; }
+        .btn-add { background-color: var(--azul-obscuro); border-bottom: 5px solid #051020; color: white; }
+
+        /* Quitar flechas de los inputs de número (Chrome, Safari, Edge, Opera) */
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+            -webkit-appearance: none; margin: 0;
+        }
+        /* Quitar flechas (Firefox) */
+        input[type=number] { -moz-appearance: textfield; }
+
+        .card { border: none; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-left: 8px solid var(--dorado); }
+        .header-title { color: var(--azul-obscuro); font-weight: 800; letter-spacing: 1px; }
         .section-hidden { display: none; }
+        .table-partidas { font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-dark p-3">
-    <span class="navbar-brand mb-0 h1">PROYECTO EMPRENDE 2026</span>
+<nav class="navbar navbar-dark p-3 shadow">
+    <div class="container d-flex justify-content-between">
+        <span class="navbar-brand mb-0 h1">PROYECTO EMPRENDE 2026</span>
+        <span class="text-light fw-bold" id="clock"></span>
+    </div>
 </nav>
 
-<div class="container mt-5">
+<div class="container mt-4 mb-5">
     <div id="pantalla-registro" class="card p-4">
-        <h2 class="header-title">Registro de Usuario</h2>
-        <hr>
-        <form id="form-registro">
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Nombre(s)</label>
-                    <input type="text" id="reg-nombre" class="form-control" required>
+        <h2 class="header-title mb-4">Registro de Usuario y Proyecto</h2>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Nombre(s)</label>
+                <input type="text" id="reg-nombre" class="form-control form-control-lg">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Apellidos</label>
+                <input type="text" id="reg-apellidos" class="form-control form-control-lg">
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Teléfono</label>
+                <input type="tel" id="reg-tel" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="fw-bold">Email</label>
+                <input type="email" id="reg-email" class="form-control">
+            </div>
+        </div>
+
+        <hr class="my-4">
+        <h4 class="text-primary fw-bold">Detalles del Proyecto</h4>
+        
+        <div class="mb-3">
+            <label class="fw-bold">Nombre del Proyecto</label>
+            <input type="text" id="proy-nombre" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label class="fw-bold">Descripción del Proyecto (Breve)</label>
+            <textarea id="proy-desc" class="form-control" rows="2" placeholder="Escriba aquí los objetivos..."></textarea>
+        </div>
+
+        <div class="bg-light p-3 rounded border mb-3">
+            <h5 class="fw-bold text-dark">Ingreso de Partidas</h5>
+            <div class="row g-2">
+                <div class="col-md-7">
+                    <input type="text" id="input-partida-nombre" class="form-control" placeholder="Concepto (Ej: Maquinaria Industrial)">
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label>Apellidos</label>
-                    <input type="text" id="reg-apellidos" class="form-control" required>
+                <div class="col-md-3">
+                    <input type="number" id="input-partida-monto" class="form-control" placeholder="Monto MXN">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" onclick="salvarPartida()" class="btn btn-add w-100 fw-bold">SALVAR</button>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label>Teléfono</label>
-                    <input type="tel" id="reg-tel" class="form-control" required>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label>Email</label>
-                    <input type="email" id="reg-email" class="form-control" required>
-                </div>
-            </div>
-            <h4 class="mt-4 text-primary">Datos del Proyecto</h4>
-            <div class="mb-3">
-                <label>Nombre del Proyecto</label>
-                <input type="text" id="proy-nombre" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label>Descripción Breve</label>
-                <textarea id="proy-desc" class="form-control" rows="2"></textarea>
-            </div>
-            <div class="row">
-                <div class="col-md-8 mb-3">
-                    <label>Partidas del Proyecto (Conceptos)</label>
-                    <input type="text" id="proy-partida" class="form-control" placeholder="Ej: Maquinaria, Software...">
-                </div>
-                <div class="col-md-4 mb-3">
-                    <label>Monto de Partida (MXN)</label>
-                    <input type="number" id="proy-monto" class="form-control">
-                </div>
-            </div>
-            <div class="mb-3">
-                <label>Subir Proyecto Resumido (PDF)</label>
-                <input type="file" class="form-control" accept=".pdf">
-            </div>
-            <button type="button" onclick="generarAcceso()" class="btn btn-3d w-100 mt-3">GENERAR CÓDIGO DE ACCESO Y QR</button>
-        </form>
+            <table class="table table-sm mt-3 table-partidas">
+                <thead><tr><th>Partida</th><th>Monto</th><th></th></tr></thead>
+                <tbody id="tabla-cuerpo-partidas"></tbody>
+            </table>
+        </div>
+
+        <div class="mb-4">
+            <label class="fw-bold">Subir Proyecto Resumido (PDF)</label>
+            <input type="file" class="form-control" id="proy-pdf" accept=".pdf">
+        </div>
+
+        <button type="button" onclick="finalizarRegistro()" class="btn btn-3d btn-lg w-100 p-3">Generar Código de Acceso y Código QR</button>
     </div>
 
     <div id="pantalla-acceso" class="card p-4 section-hidden text-center">
-        <h2 class="header-title">¡Ya estás registrado!</h2>
-        <p>Tu código de acceso es: <strong id="display-codigo" class="fs-2 text-success"></strong></p>
+        <h2 class="header-title">Registro Exitoso</h2>
+        <p class="text-muted">Ya estás registrado, ingresa tu código de acceso o escanea tu QR</p>
+        <div class="alert alert-warning d-inline-block px-5">
+            <span class="fs-1 fw-bold" id="display-codigo">0000</span>
+        </div>
         <div id="qrcode" class="d-flex justify-content-center my-3"></div>
         <hr>
-        <input type="text" id="input-login" class="form-control mb-3" placeholder="Ingresa tu código de 4 dígitos">
-        <button onclick="login()" class="btn btn-3d w-100">INGRESAR AL PANEL</button>
-        <button onclick="mostrarAdmin()" class="btn btn-link mt-3 text-muted">Eres Administrador ingresa aquí</button>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <input type="text" id="input-login" class="form-control form-control-lg mb-3 text-center" placeholder="PIN de 4 dígitos">
+                <button onclick="login()" class="btn btn-3d w-100 mb-2">INGRESAR AL PANEL</button>
+                <button onclick="accesoAdmin()" class="btn btn-outline-secondary w-100 btn-sm">Eres Administrador ingresa aquí</button>
+            </div>
+        </div>
     </div>
 
     <div id="pantalla-dashboard" class="card p-4 section-hidden">
-        <h1 class="text-center text-secondary">Monto Asignado: $13,500,000.00</h1>
-        <h2 id="saldo-restante" class="text-center text-success display-4 fw-bold">$13,500,000.00</h2>
-        <canvas id="graficaComportamiento" width="400" height="150"></canvas>
-        
-        <div class="row mt-4">
-            <div class="col-md-6 mb-3">
-                <label>Partida a comprobar</label>
-                <select id="select-partida" class="form-select"></select>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="header-title">Gestión del Proyecto</h2>
+            <div class="text-end text-muted small" id="fecha-captura-display"></div>
+        </div>
+
+        <div class="row text-center mb-4">
+            <div class="col-12">
+                <p class="mb-0 text-muted">Monto Total Entregado</p>
+                <h1 class="display-3 fw-bold text-dark">$13,500,000.00</h1>
+                <p class="mb-0 mt-3 text-muted">Saldo Pendiente por Comprobar</p>
+                <h2 id="saldo-restante" class="display-5 fw-bold text-success">$13,500,000.00</h2>
             </div>
-            <div class="col-md-6 mb-3">
-                <label>Monto comprobado (MXN)</label>
-                <input type="number" id="monto-comp" class="form-control">
-            </div>
         </div>
-        <div class="mb-3">
-            <label>Ingreso de comprobación fiscal (PDF)</label>
-            <input type="file" class="form-control" accept=".pdf">
-        </div>
-        <div class="mb-3">
-            <label>Fecha de comprobación</label>
-            <input type="date" id="fecha-comp" class="form-control">
-        </div>
+
+        <canvas id="graficaComportamiento" width="400" height="120" class="mb-4"></canvas>
         
-        <div class="d-flex gap-2">
-            <button onclick="capturarOtra()" class="btn btn-primary w-50">CAPTURAR OTRA PARTIDA</button>
-            <button onclick="cierreComprobacion()" class="btn btn-3d w-50">CIERRE DE COMPROBACIÓN</button>
+        <div class="card p-3 bg-light border-0">
+            <h5 class="fw-bold mb-3">Captura de Comprobación Fiscal</h5>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold small">Partida a comprobar</label>
+                    <select id="select-partida-dashboard" class="form-select form-select-lg"></select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold small">Monto comprobado (MXN)</label>
+                    <input type="number" id="monto-comp" class="form-control form-control-lg" placeholder="0.00">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold small">Ingreso de comprobación fiscal (PDF)</label>
+                    <input type="file" id="pdf-factura" class="form-control" accept=".pdf">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="fw-bold small">Fecha del documento fiscal</label>
+                    <input type="date" id="fecha-documento" class="form-control">
+                </div>
+            </div>
+            
+            <div class="d-flex gap-3 mt-3">
+                <button onclick="capturarOtraPartida()" class="btn btn-add flex-grow-1 p-3 fw-bold">CAPTURAR OTRA PARTIDA</button>
+                <button onclick="cierreComprobacion()" class="btn btn-3d flex-grow-1 p-3 fw-bold">CIERRE DE COMPROBACIÓN</button>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    // Lógica Simple
-    let usuarioActivo = null;
-    let saldo = 13500000;
+    // Variables de Estado
+    let listaPartidas = [];
+    let saldoTotal = 13500000.00;
+    let montoComprobadoAcumulado = 0;
+    let miGrafica;
 
-    function generarAcceso() {
-        const codigo = Math.floor(1000 + Math.random() * 9000);
-        document.getElementById('display-codigo').innerText = codigo;
+    // --- LÓGICA DE REGISTRO ---
+    function salvarPartida() {
+        const nombre = document.getElementById('input-partida-nombre').value;
+        const monto = parseFloat(document.getElementById('input-partida-monto').value);
+
+        if (nombre && monto > 0) {
+            listaPartidas.push({ nombre, monto });
+            actualizarTablaPartidas();
+            // Limpiar campos para nueva entrada
+            document.getElementById('input-partida-nombre').value = '';
+            document.getElementById('input-partida-monto').value = '';
+            document.getElementById('input-partida-nombre').focus();
+        } else {
+            alert("Por favor ingrese nombre y monto válido para la partida.");
+        }
+    }
+
+    function actualizarTablaPartidas() {
+        const tabla = document.getElementById('tabla-cuerpo-partidas');
+        tabla.innerHTML = '';
+        listaPartidas.forEach((p, index) => {
+            tabla.innerHTML += `<tr><td>${p.nombre}</td><td>$${p.monto.toLocaleString()}</td><td class='text-danger' style='cursor:pointer' onclick='eliminarPartida(${index})'>✖</td></tr>`;
+        });
+    }
+
+    function eliminarPartida(index) {
+        listaPartidas.splice(index, 1);
+        actualizarTablaPartidas();
+    }
+
+    function finalizarRegistro() {
+        if (listaPartidas.length === 0) {
+            alert("Debe ingresar al menos una partida para el proyecto.");
+            return;
+        }
+        
+        const pin = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('display-codigo').innerText = pin;
+        
+        // Mostrar Pantalla Acceso
         document.getElementById('pantalla-registro').classList.add('section-hidden');
         document.getElementById('pantalla-acceso').classList.remove('section-hidden');
         
         // Generar QR
-        new QRCode(document.getElementById("qrcode"), {
-            text: "USER-" + codigo,
-            width: 128,
-            height: 128
+        document.getElementById("qrcode").innerHTML = "";
+        new QRCode(document.getElementById("qrcode"), { text: "PIN:" + pin, width: 150, height: 150 });
+
+        // Poblar el select del Dashboard
+        const select = document.getElementById('select-partida-dashboard');
+        select.innerHTML = '';
+        listaPartidas.forEach(p => {
+            let opt = document.createElement('option');
+            opt.value = p.monto;
+            opt.text = p.nombre;
+            select.add(opt);
         });
-        
-        // Guardar partida en el select
-        const partida = document.getElementById('proy-partida').value;
-        const option = document.createElement("option");
-        option.text = partida;
-        document.getElementById('select-partida').add(option);
     }
 
+    // --- LÓGICA DE DASHBOARD ---
     function login() {
-        // Simulación de login exitoso
-        document.getElementById('pantalla-acceso').classList.add('section-hidden');
-        document.getElementById('pantalla-dashboard').classList.remove('section-hidden');
-        renderGrafica();
+        const pinIngresado = document.getElementById('input-login').value;
+        const pinReal = document.getElementById('display-codigo').innerText;
+
+        if (pinIngresado === pinReal) {
+            document.getElementById('pantalla-acceso').classList.add('section-hidden');
+            document.getElementById('pantalla-dashboard').classList.remove('section-hidden');
+            inicializarGrafica();
+        } else {
+            alert("Código incorrecto.");
+        }
+    }
+
+    function capturarOtraPartida() {
+        const montoIngresado = parseFloat(document.getElementById('monto-comp').value);
+        if (isNaN(montoIngresado) || montoIngresado <= 0) {
+            alert("Ingrese un monto válido a comprobar.");
+            return;
+        }
+
+        montoComprobadoAcumulado += montoIngresado;
+        const nuevoSaldo = saldoTotal - montoComprobadoAcumulado;
+        
+        document.getElementById('saldo-restante').innerText = "$" + nuevoSaldo.toLocaleString();
+        
+        // Limpiar campos para nueva captura
+        document.getElementById('monto-comp').value = "";
+        document.getElementById('pdf-factura').value = "";
+        
+        actualizarGrafica(montoComprobadoAcumulado);
+        alert("Partida guardada exitosamente. Puede capturar la siguiente.");
     }
 
     function cierreComprobacion() {
-        alert("Sesión cerrada. Fecha de captura: " + new Date().toLocaleString());
-        location.reload();
+        const ahora = new Date().toLocaleString();
+        document.getElementById('fecha-captura-display').innerText = "Última captura exitosa: " + ahora;
+        alert("Cierre de comprobación exitoso. Los datos se han salvado en el estado del proyecto.");
+        location.reload(); // En una app real, aquí guardaríamos en base de datos.
     }
 
-    function capturarOtra() {
-        const monto = parseFloat(document.getElementById('monto-comp').value) || 0;
-        saldo -= monto;
-        document.getElementById('saldo-restante').innerText = "$" + saldo.toLocaleString();
-        alert("Partida guardada con éxito.");
-        document.getElementById('monto-comp').value = "";
+    function accesoAdmin() {
+        const pass = prompt("Acceso Administrador. Ingrese Código:");
+        if(pass === "Admin100583") {
+            alert("Bienvenido Administrador. Generando reporte de usuarios...");
+            // Lógica para listar usuarios y descargar Excel vendría aquí.
+        }
     }
 
-    function renderGrafica() {
+    // --- GRÁFICAS ---
+    function inicializarGrafica() {
         const ctx = document.getElementById('graficaComportamiento').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
+        miGrafica = new Chart(ctx, {
+            type: 'bar',
             data: {
-                labels: ['Inicio', 'Captura 1'],
+                labels: ['Monto Asignado', 'Monto Comprobado'],
                 datasets: [{
-                    label: 'Flujo de Capital',
-                    data: [13500000, 13000000],
-                    borderColor: '#d4af37',
-                    fill: false
+                    label: 'Pesos Mexicanos (MXN)',
+                    data: [13500000, 0],
+                    backgroundColor: ['#0d47a1', '#d4af37']
                 }]
-            }
+            },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
         });
     }
 
-    function mostrarAdmin() {
-        const pass = prompt("Ingrese código de Administrador:");
-        if(pass === "Admin100583") {
-            alert("Bienvenido Administrador. Accediendo a base de datos...");
-            // Aquí iría la lógica de Admin
-        } else {
-            alert("Código incorrecto");
-        }
+    function actualizarGrafica(valor) {
+        miGrafica.data.datasets[0].data[1] = valor;
+        miGrafica.update();
     }
 </script>
+
 </body>
 </html>
